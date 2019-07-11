@@ -32,13 +32,15 @@ const middlewares = [epicMiddleware, thunk];
 
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-export const initialState: Types.initialState = { posts: [] };
+const initialState: Types.initialState = {
+  posts: []
+};
 
 const store = createStore(Reducers, initialState, enhancer);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App>asdasd</App>
+    <App />
   </Provider>,
   document.getElementById('root')
 );

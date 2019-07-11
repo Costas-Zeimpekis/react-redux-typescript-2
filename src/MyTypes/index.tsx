@@ -12,6 +12,8 @@ export type RootState = StateType<
   ReturnType<typeof import('../container/Store/Reducers').default>
 >;
 
-export type initialState = { posts: [] };
+export type initialState = { posts: posts[] };
 
-export type State = { posts: [] };
+export type State = { posts: posts[] };
+
+// export type reducerPosts = (state: initoalState, action: RootAction) => RootState;
