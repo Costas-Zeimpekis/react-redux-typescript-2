@@ -1,14 +1,17 @@
 import { StateType, ActionType } from 'typesafe-actions';
 
-export type posts = { id: number; title: string };
+export type posts = { userId: number; id: number; title: string; body: string };
 
+export type Posts = posts[];
+
+export type Store = StateType<typeof import('../index').default>;
 export type RootAction = ActionType<
   typeof import('../container/Store/actions')
 >;
 export type RootState = StateType<
-  typeof import('../container/Store/Reducers').default
+  ReturnType<typeof import('../container/Store/Reducers').default>
 >;
 
-export type State = {
-  readonly posts: posts;
-};
+export type initialState = { posts: [] };
+
+// export type ReducerPosts = (state: RootState, action: RootAction) => RootState;

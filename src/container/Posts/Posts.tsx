@@ -1,43 +1,77 @@
-import React, { Component } from 'react';
+import React, { Component, SyntheticEvent } from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { getPosts, deletePosts } from '../Store/actions';
-import { RootState, RootAction, posts } from '../../MyTypes';
+import { bindActionCreators, Dispatch } from 'redux';
+import { getPosts } from '../Store/actions';
+import * as Types from '../../MyTypes';
 
 type PostsProps = {
-  posts: posts;
-  getPosts: Function;
-  deletePost: Function;
+  posts: Types.posts[];
+  getPosts: any;
 };
 
-class Posts extends Component<PostsProps> {
-  componentWillMount() {
-    const { getPosts } = this.props;
-    getPosts();
+type PostsState = {
+  posts: Types.posts[];
+};
+
+class Posts extends Component<PostsProps, PostsState> {
+  state: PostsState = {
+    posts: this.props.posts
+  };
+
+  componentDidMount() {
+    this.props.getPosts();
+  }
+
+  componentDidUpdate() {
+    console.log('yea2h');
+    console.log(this.props.posts.length);
+    if (this.props.posts.length > 0) {
+      // const posts = [...Prevstate.posts, this.props.posts];
+      console.log('yeah');
+      this.setState({
+        posts: this.props.posts
+      });
+      return true;
+    }
+    return true;
   }
 
   render() {
-    let posts: posts = this.props.posts;
-    let title = '';
+    const { posts }: { posts: Types.posts[] } = this.props;
 
-    if (posts) {
-      title = posts.title;
-    }
+    console.log('Length: ', posts.length);
 
-    return <div>Title:{title}</div>;
+    return (
+      <div>
+        {
+          <ul>
+            {this.props.posts.map(post => (
+              <li>Title: {post.title}</li>
+            ))}
+          </ul>
+        }
+      </div>
+    );
   }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: Types.RootState) => {
   return {
     posts: state.posts
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => {
+// const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
+//   bindActionCreators(
+//     {
+//       getPosts
+//     },
+//     dispatch
+//   );
+
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    getPosts: () => dispatch(getPosts()),
-    deletePost: () => dispatch(deletePosts())
+    getPosts: () => dispatch(getPosts())
   };
 };
 

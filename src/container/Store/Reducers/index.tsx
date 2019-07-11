@@ -1,18 +1,18 @@
 import { GET_POST } from '../constants';
-import { RootState, posts } from '../../../MyTypes';
+import * as Types from '../../../MyTypes';
 import { combineReducers } from 'redux';
-import * as actions from '../actions';
-import { ActionType } from 'typesafe-actions';
+import { createReducer } from 'typesafe-actions';
+// import { initialState } from '../../../index';
 
-export type TodosAction = ActionType<typeof actions>;
+const initialState: Types.initialState = {
+  posts: []
+};
 
-export type TodosState = Readonly<{
-  posts: posts;
-}>;
-
-const reducerPosts: any = (state: RootState, action: any) => {
+const reducerPosts: any = (
+  state: Types.RootState = initialState,
+  action: Types.RootAction
+) => {
   if (action.type === GET_POST) {
-    console.log(action.payload);
     return {
       ...state,
       posts: action.payload
@@ -21,6 +21,13 @@ const reducerPosts: any = (state: RootState, action: any) => {
   return state;
 };
 
-export default combineReducers<TodosState, TodosAction>({
+// const reducerPosts = createReducer(initialState).handleAction(
+//   GET_POST,
+//   (state, action) => {
+//     return action.payload;
+//   }
+// );
+
+export default combineReducers<Types.initialState, Types.RootAction>({
   posts: reducerPosts
 });
