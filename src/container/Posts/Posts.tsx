@@ -14,10 +14,6 @@ class Posts extends Component<PostsProps> {
     this.props.getPosts();
   }
 
-  help() {
-    this.props.getPosts();
-  }
-
   render() {
     const { posts }: { posts: Types.posts[] } = this.props;
 
@@ -32,7 +28,6 @@ class Posts extends Component<PostsProps> {
               : 'Nonono'}
           </ul>
         }
-        <button onClick={this.help}>Help</button>
       </div>
     );
   }
