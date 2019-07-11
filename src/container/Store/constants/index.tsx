@@ -1,1 +1,1 @@
-export const GET_POST = 'GET_POSTS';
+export const INIT_POSTS = 'INIT_POSTSS';

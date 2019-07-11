@@ -18,11 +18,12 @@ class Posts extends Component<PostsProps> {
     const { posts }: { posts: Types.posts[] } = this.props;
 
     console.log('Length: ', posts.length);
+    const styles: React.CSSProperties = { listStyle: 'none', padding: '0' };
 
     return (
       <div>
         {
-          <ul>
+          <ul style={styles}>
             {this.props.posts.length >= 0
               ? this.props.posts.map(post => <li>Title: {post.title}</li>)
               : 'Nonono'}

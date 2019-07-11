@@ -1,4 +1,4 @@
-import { GET_POST } from '../constants';
+import { INIT_POSTS } from '../constants';
 import * as Types from '../../../MyTypes';
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
@@ -12,7 +12,7 @@ const reducerPosts: any = (
   state: Types.RootState,
   action: Types.RootAction
 ) => {
-  if (action.type === GET_POST) {
+  if (action.type === INIT_POSTS) {
     return {
       ...state,
       posts: action.payload
