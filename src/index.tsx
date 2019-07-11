@@ -9,13 +9,13 @@ import thunk from 'redux-thunk';
 import { createEpicMiddleware } from 'redux-observable';
 import * as Types from './MyTypes';
 
-// export const epicMiddleware = createEpicMiddleware<
-//   Types.RootAction,
-//   Types.RootAction,
-//   Types.RootState
-// >({
-//   dependencies: thunk
-// });
+export const epicMiddleware = createEpicMiddleware<
+  Types.RootAction,
+  Types.RootAction,
+  Types.RootState
+>({
+  dependencies: thunk
+});
 
 declare global {
   interface Window {
@@ -28,13 +28,13 @@ window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ =
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-// const middlewares = [epicMiddleware];
+const middlewares = [epicMiddleware, thunk];
 
-// const enhancer = composeEnhancers(applyMiddleware(thunk));
+const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-// export const initialState = { posts: [] };
+export const initialState: Types.initialState = { posts: [] };
 
-const store = createStore(Reducers, composeEnhancers(applyMiddleware(thunk)));
+const store = createStore(Reducers, initialState, enhancer);
 
 ReactDOM.render(
   <Provider store={store}>

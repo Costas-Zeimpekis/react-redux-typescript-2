@@ -1,6 +1,6 @@
-import React, { Component, SyntheticEvent } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { getPosts } from '../Store/actions';
 import * as Types from '../../MyTypes';
 
@@ -9,31 +9,13 @@ type PostsProps = {
   getPosts: any;
 };
 
-type PostsState = {
-  posts: Types.posts[];
-};
-
-class Posts extends Component<PostsProps, PostsState> {
-  state: PostsState = {
-    posts: this.props.posts
-  };
-
+class Posts extends Component<PostsProps> {
   componentDidMount() {
     this.props.getPosts();
   }
 
-  componentDidUpdate() {
-    console.log('yea2h');
-    console.log(this.props.posts.length);
-    if (this.props.posts.length > 0) {
-      // const posts = [...Prevstate.posts, this.props.posts];
-      console.log('yeah');
-      this.setState({
-        posts: this.props.posts
-      });
-      return true;
-    }
-    return true;
+  help() {
+    this.props.getPosts();
   }
 
   render() {
@@ -45,11 +27,12 @@ class Posts extends Component<PostsProps, PostsState> {
       <div>
         {
           <ul>
-            {this.props.posts.map(post => (
-              <li>Title: {post.title}</li>
-            ))}
+            {this.props.posts.length >= 0
+              ? this.props.posts.map(post => <li>Title: {post.title}</li>)
+              : 'Nonono'}
           </ul>
         }
+        <button onClick={this.help}>Help</button>
       </div>
     );
   }
@@ -69,6 +52,7 @@ const mapStateToProps = (state: Types.RootState) => {
 //     dispatch
 //   );
 
+// type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 const mapDispatchToProps = (dispatch: any) => {
   return {
     getPosts: () => dispatch(getPosts())

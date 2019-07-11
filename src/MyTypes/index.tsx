@@ -14,4 +14,4 @@ export type RootState = StateType<
 
 export type initialState = { posts: [] };
 
-// export type ReducerPosts = (state: RootState, action: RootAction) => RootState;
+export type State = { posts: [] };
