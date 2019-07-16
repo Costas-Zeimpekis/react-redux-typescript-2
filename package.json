@@ -10,6 +10,9 @@
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.4",
     "@types/react-router-dom": "^4.3.4",
+    "husky": "^3.0.0",
+    "lint-staged": "^9.2.0",
+    "prettier": "^1.18.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
@@ -45,5 +48,16 @@
   },
   "devDependencies": {
     "@types/react-redux": "^7.1.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
   }
 }
