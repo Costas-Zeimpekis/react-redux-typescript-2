@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPosts, PostsActionsThunkDispatch } from '../Store/actions';
-import { PostType, RootState } from '../../MyTypes';
+import { PostType, RootState, PostsProps } from '../../MyTypes';
 import Post from './Post/Post';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Paper, Box, Typography } from '@material-ui/core';
 import { FastRewind, FastForward } from '@material-ui/icons';
-
-type PostsProps = {
-  posts: PostType[];
-  getPosts: any;
-};
 
 class Posts extends Component<PostsProps> {
   state = {

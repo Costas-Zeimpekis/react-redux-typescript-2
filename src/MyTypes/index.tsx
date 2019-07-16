@@ -1,4 +1,5 @@
 import { StateType, ActionType } from 'typesafe-actions';
+import { match, RouteComponentProps } from 'react-router-dom';
 
 export type PostType = {
   userId: number;
@@ -16,3 +17,23 @@ export type RootState = StateType<
 >;
 
 export type State = { posts: PostType[] };
+
+export type PostsProps = {
+  posts: PostType[];
+  getPosts: () => void;
+};
+
+export interface PostProps extends RouteComponentProps<PostParams> {
+  title: string;
+  body: string;
+}
+
+interface PostParams {
+  id: string;
+}
+
+export interface errorsType {
+  userId?: string;
+  title?: string;
+  body?: string;
+}

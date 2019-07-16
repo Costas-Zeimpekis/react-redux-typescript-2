@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { PostType, RootState } from '../../../MyTypes';
-import { match, Link } from 'react-router-dom';
+import { PostType, RootState, errorsType, PostProps } from '../../../MyTypes';
+import { Link } from 'react-router-dom';
 import {
   Button,
   TextField,
@@ -13,16 +13,6 @@ import {
   Grid
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-interface DetailParams {
-  id: string;
-}
-
-interface PostProps {
-  title: string;
-  body: string;
-  posts?: PostType[];
-  match?: match<DetailParams>;
-}
 
 const initialState = {
   userId: 0,
@@ -30,12 +20,6 @@ const initialState = {
   title: '',
   body: ''
 };
-
-interface errorsType {
-  userId?: string;
-  title?: string;
-  body?: string;
-}
 
 const useStyles = makeStyles({
   formControl: { width: '100%' },
@@ -55,7 +39,6 @@ const useStyles = makeStyles({
 
 const Post: React.FC<PostProps> = props => {
   const [post, setPost] = useState<PostType>(initialState);
-  const [disableBtn, setDisableBtn] = useState(true);
   const match = props.match;
   const classes = useStyles();
 
@@ -65,10 +48,19 @@ const Post: React.FC<PostProps> = props => {
     setPost(data);
   };
 
+  const putPost = (id: string, body: PostType) => {
+    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json text/plain, */*',
+        'Content-type': 'application/jsonn'
+      },
+      body: JSON.stringify(body)
+    });
+  };
+
   useEffect(() => {
-    if (match) {
-      fetchPost(match.params.id);
-    }
+    fetchPost(match.params.id);
   }, []);
 
   const onChangeHandler = (name: string) => {
@@ -77,8 +69,13 @@ const Post: React.FC<PostProps> = props => {
     };
   };
 
-  const errors: errorsType | undefined = useMemo(() => {
-    let errorsObj: errorsType | undefined = {};
+  const submitHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    putPost(match.params.id, post);
+  };
+
+  const errors: errorsType = useMemo(() => {
+    let errorsObj: errorsType = {};
 
     if (String(post.userId) === '') {
       errorsObj['userId'] = 'UserId must be set';
@@ -102,27 +99,8 @@ const Post: React.FC<PostProps> = props => {
       errorsObj['body'] = 'The Title needs to be less then 20 charcters';
     }
 
-    Object.getOwnPropertyNames(errorsObj).length === 0
-      ? setDisableBtn(false)
-      : setDisableBtn(true);
-
-    return { ...errorsObj };
+    return errorsObj;
   }, [post]);
-
-  const submitHandler = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (match)
-      fetch(`https://jsonplaceholder.typicode.com/posts/${match.params.id}`, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json text/plain, */*',
-          'Content-type': 'application/jsonn'
-        },
-        body: JSON.stringify(post)
-      })
-        .then(res => res.json())
-        .then(data => console.log(data));
-  };
 
   if (match) {
     return (
@@ -194,7 +172,7 @@ const Post: React.FC<PostProps> = props => {
                   color="primary"
                   className={classes.button}
                   type="submit"
-                  disabled={disableBtn}
+                  disabled={!!Object.keys(errors).length}
                 >
                   Submit
                 </Button>

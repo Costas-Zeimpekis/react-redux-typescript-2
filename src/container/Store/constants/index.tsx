@@ -1,1 +1,1 @@
-export const INIT_POSTS = 'INIT_POSTSS';
+export const INIT_POSTS = 'INIT_POSTS';
