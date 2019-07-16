@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPosts, PostsActionsThunkDispatch } from '../Store/actions';
-import { PostType, RootState, PostsProps } from '../../MyTypes';
-import Post from './Post/Post';
+import { RootState, PostsProps } from '../../MyTypes';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Paper, Box, Typography } from '@material-ui/core';
 import { FastRewind, FastForward } from '@material-ui/icons';
+import Post from './Post/Post';
 
 class Posts extends Component<PostsProps> {
   state = {
     currentPage: 1,
-    postsPerPage: 6,
-    posts: this.props.posts
+    postsPerPage: 6
   };
 
   componentDidMount() {
@@ -67,7 +66,7 @@ class Posts extends Component<PostsProps> {
 
     return (
       <Grid container spacing={4} alignItems="stretch">
-        {this.state.posts.length >= 0
+        {posts.length >= 0
           ? curerntPost.map(post => (
               <Grid item xs={4} key={post.id}>
                 <Link to={`/posts/${post.id}`} style={styles}>

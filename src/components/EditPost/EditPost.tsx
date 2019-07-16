@@ -63,7 +63,7 @@ const EditPost: React.FC<EditPostProps> = props => {
   }, [match.params.id]);
 
   const onChangeHandler = (name: string) => {
-    return (event: any) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
       setPost({ ...post, [name]: event.target.value });
     };
   };
