@@ -10,15 +10,13 @@ import { FastRewind, FastForward } from '@material-ui/icons';
 class Posts extends Component<PostsProps> {
   state = {
     currentPage: 1,
-    postsPerPage: 6
+    postsPerPage: 6,
+    posts: this.props.posts
   };
 
-  match = this.props.match;
   componentDidMount() {
     this.props.getPosts();
   }
-
-  mathc = this.props.match;
 
   decrementPage = () => {
     const currentPage = this.state.currentPage - 1;
@@ -47,7 +45,12 @@ class Posts extends Component<PostsProps> {
   };
 
   render() {
-    const { posts }: { posts: PostType[] } = this.props;
+    const { posts } = this.props;
+    const styles: React.CSSProperties = {
+      textDecoration: 'none',
+      height: '100%'
+    };
+
     const { currentPage, postsPerPage } = this.state;
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - this.state.postsPerPage;
@@ -62,30 +65,17 @@ class Posts extends Component<PostsProps> {
       pageNumber.push(i);
     }
 
-    const styles: React.CSSProperties = {
-      textDecoration: 'none',
-      height: '100%'
-    };
-
-    const { history, match, location } = this.props;
-
     return (
       <Grid container spacing={4} alignItems="stretch">
-        {posts.length >= 0
+        {this.state.posts.length >= 0
           ? curerntPost.map(post => (
               <Grid item xs={4} key={post.id}>
                 <Link to={`/posts/${post.id}`} style={styles}>
-                  <Post
-                    history={history}
-                    match={match}
-                    location={location}
-                    title={post.title}
-                    body={post.body}
-                  />
+                  <Post title={post.title} body={post.body} />
                 </Link>
               </Grid>
             ))
-          : 'Nonono'}
+          : '...Loading'}
         <Box component="section" display="flex" style={{ margin: '15px' }}>
           <Button
             onClick={this.decrementPage}
