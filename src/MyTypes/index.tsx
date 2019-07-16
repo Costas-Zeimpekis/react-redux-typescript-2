@@ -18,10 +18,10 @@ export type RootState = StateType<
 
 export type State = { posts: PostType[] };
 
-export type PostsProps = {
+export interface PostsProps extends RouteComponentProps<PostParams> {
   posts: PostType[];
   getPosts: () => void;
-};
+}
 
 export interface PostProps extends RouteComponentProps<PostParams> {
   title: string;
