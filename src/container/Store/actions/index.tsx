@@ -1,7 +1,12 @@
-import { action } from 'typesafe-actions';
 import { INIT_POSTS } from '../constants';
-import * as Types from '../../..//MyTypes';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
+import { PostType } from '../../..//MyTypes';
+import { ThunkDispatch } from 'redux-thunk';
+
+export interface PostActions extends Action {
+  posts: PostType[];
+}
+export type PostsActionsThunkDispatch = ThunkDispatch<any, any, PostActions>;
 
 export const getPosts = () => {
   return async (dispatch: Dispatch): Promise<void> => {
@@ -11,4 +16,6 @@ export const getPosts = () => {
   };
 };
 
-export const initPosts = (posts: Types.posts[]) => action(INIT_POSTS, posts);
+export function initPosts(posts: PostType[]): PostActions {
+  return { type: INIT_POSTS, posts };
+}
