@@ -1,6 +1,6 @@
 import { INIT_POSTS } from '../constants';
 import { Action, Dispatch } from 'redux';
-import { PostType } from '../../..//MyTypes';
+import { PostType } from '../../../myTypes';
 import { ThunkDispatch } from 'redux-thunk';
 
 export interface PostActions extends Action {

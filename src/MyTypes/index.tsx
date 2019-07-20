@@ -4,11 +4,11 @@ import { RouteComponentProps } from 'react-router-dom';
 export type Store = StateType<typeof import('../index').default>;
 
 export type RootAction = ActionType<
-  typeof import('../container/Store/actions')
+  typeof import('../container/store/actions')
 >;
 
 export type RootState = StateType<
-  ReturnType<typeof import('../container/Store/Reducers').default>
+  ReturnType<typeof import('../container/store/reducers').default>
 >;
 
 export type State = { posts: PostType[] };

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPosts, PostsActionsThunkDispatch } from '../Store/actions';
-import { RootState, PostsProps } from '../../MyTypes';
+import { getPosts, PostsActionsThunkDispatch } from '../store/actions';
+import { RootState, PostsProps } from '../../myTypes';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Paper, Box, Typography } from '@material-ui/core';
 import { FastRewind, FastForward } from '@material-ui/icons';
