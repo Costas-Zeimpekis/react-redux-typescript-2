@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react';
-import Home from './routes/Home/Home';
-import Posts from '../container/Posts/Posts';
-import EditPost from './routes/EditPost/EditPost';
+import React, { Fragment, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles, Container, CssBaseline } from '@material-ui/core';
+
+const Home = lazy(() => import('./routes/Home/Home'));
+const Posts = lazy(() => import('../container/Posts/Posts'));
+const EditPost = lazy(() => import('./routes/EditPost/EditPost'));
 
 const useStyles = makeStyles({
   root: {
@@ -15,17 +16,19 @@ const App: React.FC = () => {
   const classes = useStyles();
   return (
     <Fragment>
-      <Router>
-        <CssBaseline>
-          <Container maxWidth="lg" className={classes.root}>
-            <Switch>
-              <Route path="/" exact component={Home} />
-              <Route path="/posts" exact component={Posts} />
-              <Route path="/posts/:id" component={EditPost} />
-            </Switch>
-          </Container>
-        </CssBaseline>
-      </Router>
+      <CssBaseline>
+        <Container maxWidth="lg" className={classes.root}>
+          <Router>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Switch>
+                <Route path="/" exact component={Home} />
+                <Route path="/posts" exact component={Posts} />
+                <Route path="/posts/:id" component={EditPost} />
+              </Switch>
+            </Suspense>
+          </Router>
+        </Container>
+      </CssBaseline>
     </Fragment>
   );
 };
