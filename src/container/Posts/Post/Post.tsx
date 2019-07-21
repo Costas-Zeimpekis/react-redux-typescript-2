@@ -1,5 +1,5 @@
 import React from 'react';
-import { PostProps } from '../../../MyTypes';
+import { PostProps } from '../../../myTypes';
 import { Card, CardHeader, CardContent, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
