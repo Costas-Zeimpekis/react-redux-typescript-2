@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
-import Home from './Home';
+import Home from './routes/Home/Home';
 import Posts from '../container/Posts/Posts';
-import EditPost from './EditPost/EditPost';
+import EditPost from './routes/EditPost/EditPost';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles, Container, CssBaseline } from '@material-ui/core';
 

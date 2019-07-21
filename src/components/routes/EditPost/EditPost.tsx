@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { PostType, errorsType, EditPostProps } from '../../myTypes';
+import { PostType, errorsType, EditPostProps } from '../../../myTypes';
 import { Link } from 'react-router-dom';
 import {
   Button,
