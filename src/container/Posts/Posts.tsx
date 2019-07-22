@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPosts, PostsActionsThunkDispatch } from '../store/actions';
-import { RootState, PostsProps } from '../../myTypes';
+import { RootState, PostType } from '../../myTypes';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Paper, Box, Typography } from '@material-ui/core';
 import { FastRewind, FastForward } from '@material-ui/icons';
 import Post from './Post/Post';
+
+interface PostsProps {
+  posts: PostType[];
+  getPosts: () => void;
+}
 
 class Posts extends Component<PostsProps> {
   state = {
@@ -116,7 +121,7 @@ class Posts extends Component<PostsProps> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    posts: state.post.posts
+    posts: state.posts.posts
   };
 };
 

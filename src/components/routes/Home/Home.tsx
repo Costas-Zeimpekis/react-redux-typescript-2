@@ -8,6 +8,7 @@ const Home: React.FC<ChildComponentProps> = ({ history }) => {
   const onBtnHandler = () => {
     history.push('/posts');
   };
+
   return (
     <Box component="section">
       <Typography component="h1">

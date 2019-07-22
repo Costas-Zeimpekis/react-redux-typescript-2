@@ -2,6 +2,7 @@ import React, { Fragment, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles, Container, CssBaseline } from '@material-ui/core';
 
+import ErrorBounry from './ErrorBoundry/ErrorBoundry';
 const Home = lazy(() => import('./routes/Home/Home'));
 const Posts = lazy(() => import('../container/Posts/Posts'));
 const EditPost = lazy(() => import('./routes/EditPost/EditPost'));
@@ -19,13 +20,15 @@ const App: React.FC = () => {
       <CssBaseline>
         <Container maxWidth="lg" className={classes.root}>
           <Router>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/posts" exact component={Posts} />
-                <Route path="/posts/:id" component={EditPost} />
-              </Switch>
-            </Suspense>
+            <ErrorBounry>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Switch>
+                  <Route path="/" exact component={Home} />
+                  <Route path="/posts" exact component={Posts} />
+                  <Route path="/posts/:id" component={EditPost} />
+                </Switch>
+              </Suspense>
+            </ErrorBounry>
           </Router>
         </Container>
       </CssBaseline>

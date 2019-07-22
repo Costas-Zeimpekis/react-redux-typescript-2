@@ -1,4 +1,4 @@
-import { INIT_POSTS } from '../constants';
+import { INIT_POSTS, ERROR_GET_POSTS } from '../constants';
 import { Action, Dispatch } from 'redux';
 import { PostType } from '../../../myTypes';
 import { ThunkDispatch } from 'redux-thunk';
@@ -6,16 +6,29 @@ import { ThunkDispatch } from 'redux-thunk';
 export interface PostActions extends Action {
   posts: PostType[];
 }
+
+export interface ErrorAction extends Action {
+  error: Error;
+}
+
 export type PostsActionsThunkDispatch = ThunkDispatch<any, any, PostActions>;
 
 export const getPosts = () => {
   return async (dispatch: Dispatch): Promise<void> => {
-    const res = await fetch('https://jsonplaceholder.typicode.com/posts');
-    const posts = await res.json();
-    dispatch(initPosts(posts));
+    try {
+      const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+      const posts = await res.json();
+      dispatch(initPosts(posts));
+    } catch (error) {
+      dispatch(errorGetPosts(error));
+    }
   };
 };
 
 export function initPosts(posts: PostType[]): PostActions {
   return { type: INIT_POSTS, posts };
 }
+
+const errorGetPosts = (error: Error) => {
+  return { type: ERROR_GET_POSTS, error };
+};
