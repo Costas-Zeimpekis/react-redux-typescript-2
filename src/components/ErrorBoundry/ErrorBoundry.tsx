@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 
 export class ErrorBoundry extends Component {
-  state = { error: null, errorInfo: null };
+  state = { error: false };
 
   static getDerivedStateFromError(error: Error) {
-    return { error: true };
-  }
-
-  componentDidCatch(error: Error, errorInfo: Object) {
-    this.setState({
-      error: error,
-      errorInfo: errorInfo
-    });
+    return { error };
   }
 
   render() {
     if (this.state.error) {
-      return <h1>Something went wrong</h1>;
+      return (
+        <div>
+          <h2>Something went wrong.</h2>
+          <details>{this.state.error && this.state.error.toString()}</details>
+        </div>
+      );
     }
     return this.props.children;
   }

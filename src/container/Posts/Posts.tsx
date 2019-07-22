@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPosts, PostsActionsThunkDispatch } from '../store/actions';
 import { RootState, PostType } from '../../myTypes';
+
 import { Link } from 'react-router-dom';
 import { Grid, Button, Paper, Box, Typography } from '@material-ui/core';
 import { FastRewind, FastForward } from '@material-ui/icons';
@@ -25,6 +26,7 @@ class Posts extends Component<PostsProps> {
 
   decrementPage = () => {
     const currentPage = this.state.currentPage - 1;
+
     if (currentPage > 0) {
       this.setState({
         currentPage
@@ -34,6 +36,7 @@ class Posts extends Component<PostsProps> {
 
   incrementPage = () => {
     const currentPage = this.state.currentPage + 1;
+
     if (currentPage < this.props.posts.length / this.state.postsPerPage) {
       this.setState({
         currentPage
@@ -68,10 +71,6 @@ class Posts extends Component<PostsProps> {
       i++
     ) {
       pageNumber.push(i);
-    }
-
-    if (this.props.errorGetPosts) {
-      throw this.props.errorGetPosts;
     }
 
     return (

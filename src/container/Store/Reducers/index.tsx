@@ -8,7 +8,7 @@ interface PostState {
 }
 
 interface ErrorState {
-  error: Error | '';
+  error: Error;
 }
 
 const initialState: PostState = {
@@ -16,7 +16,7 @@ const initialState: PostState = {
 };
 
 const initialErrorState = {
-  error: ''
+  error: new Error('')
 };
 
 const reducerPosts = (state: PostState = initialState, action: PostActions) => {
@@ -32,7 +32,7 @@ const reducerPosts = (state: PostState = initialState, action: PostActions) => {
 };
 
 const reducerErrorGetPosts = (
-  state: any = initialErrorState,
+  state: ErrorState = initialErrorState,
   action: ErrorAction
 ) => {
   switch (action.type) {

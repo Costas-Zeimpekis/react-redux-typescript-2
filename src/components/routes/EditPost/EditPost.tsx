@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PostType } from '../../../myTypes';
 import { RouteComponentProps } from 'react-router-dom';
+import { httpPost, httpGet } from '../../../Helpers/http';
 
 import { Link } from 'react-router-dom';
 import {
@@ -58,25 +59,12 @@ const EditPost: React.FC<EditPostProps> = props => {
   const match = props.match;
   const classes = useStyles();
 
-  const fetchPost = async (id: string) => {
-    const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-    const data = await res.json();
-    setPost(data);
-  };
-
   const putPost = (id: string, body: PostType) => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json text/plain, */*',
-        'Content-type': 'application/jsonn'
-      },
-      body: JSON.stringify(body)
-    });
+    httpPost(id, body);
   };
 
   useEffect(() => {
-    fetchPost(match.params.id);
+    httpGet(match.params.id, setPost);
   }, [match.params.id]);
 
   const onChangeHandler = (name: string) => {
