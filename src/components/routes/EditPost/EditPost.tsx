@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { PostType } from '../../../myTypes';
+import { PostType, ErrorsType } from '../../../myTypes';
 import { RouteComponentProps } from 'react-router-dom';
 import { httpPost, httpGet } from '../../../Helpers/http';
+import { editPostValidation } from '../../../Helpers/editPostValidation';
 
 import { Link } from 'react-router-dom';
 import {
@@ -23,12 +24,6 @@ interface EditPostProps extends RouteComponentProps<EditPostParams> {
 
 interface EditPostParams {
   id: string;
-}
-
-interface errorsType {
-  userId?: string;
-  title?: string;
-  body?: string;
 }
 
 const initialState = {
@@ -56,8 +51,8 @@ const useStyles = makeStyles({
 
 const EditPost: React.FC<EditPostProps> = props => {
   const [post, setPost] = useState<PostType>(initialState);
-  const match = props.match;
   const classes = useStyles();
+  const match = props.match;
 
   const putPost = (id: string, body: PostType) => {
     httpPost(id, body);
@@ -78,30 +73,10 @@ const EditPost: React.FC<EditPostProps> = props => {
     putPost(match.params.id, post);
   };
 
-  const errors: errorsType = useMemo(() => {
-    let errorsObj: errorsType = {};
+  const errors: ErrorsType = useMemo(() => {
+    let errorsObj: ErrorsType = {};
 
-    if (String(post.userId) === '') {
-      errorsObj['userId'] = 'UserId must be set';
-    }
-
-    if (isNaN(post.userId)) {
-      errorsObj['userId'] = 'The userId must be a number';
-    }
-
-    if (post.title === '') {
-      errorsObj['title'] = 'Title must be set';
-    }
-    if (post.title.length < 10) {
-      errorsObj['title'] = 'The Title needs to be less then 10 charcters';
-    }
-
-    if (post.body === '') {
-      errorsObj['body'] = 'Body must be set';
-    }
-    if (post.body.length < 20) {
-      errorsObj['body'] = 'The Title needs to be less then 20 charcters';
-    }
+    editPostValidation(post, errorsObj);
 
     return errorsObj;
   }, [post]);

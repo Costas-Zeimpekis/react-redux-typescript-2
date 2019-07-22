@@ -18,3 +18,9 @@ export type PostType = {
   title: string;
   body: string;
 };
+
+export interface ErrorsType {
+  userId?: string;
+  title?: string;
+  body?: string;
+}
