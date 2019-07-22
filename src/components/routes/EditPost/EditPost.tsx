@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { PostType, errorsType, EditPostProps } from '../../../myTypes';
+import { PostType } from '../../../myTypes';
+import { RouteComponentProps } from 'react-router-dom';
+
 import { Link } from 'react-router-dom';
 import {
   Button,
@@ -12,6 +14,21 @@ import {
   Grid
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+interface EditPostProps extends RouteComponentProps<EditPostParams> {
+  title: string;
+  body: string;
+}
+
+interface EditPostParams {
+  id: string;
+}
+
+interface errorsType {
+  userId?: string;
+  title?: string;
+  body?: string;
+}
 
 const initialState = {
   userId: 0,
