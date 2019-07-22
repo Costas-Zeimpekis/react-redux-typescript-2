@@ -9,6 +9,7 @@ import Post from './Post/Post';
 
 interface PostsProps {
   posts: PostType[];
+  errorGetPosts: Error;
   getPosts: () => void;
 }
 
@@ -69,6 +70,10 @@ class Posts extends Component<PostsProps> {
       pageNumber.push(i);
     }
 
+    if (this.props.errorGetPosts) {
+      throw this.props.errorGetPosts;
+    }
+
     return (
       <Grid container spacing={4} alignItems="stretch">
         {posts.length >= 0
@@ -121,7 +126,8 @@ class Posts extends Component<PostsProps> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    posts: state.posts.posts
+    posts: state.posts.posts,
+    errorGetPost: state.error
   };
 };
 
