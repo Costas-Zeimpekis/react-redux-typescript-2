@@ -15,16 +15,14 @@ export type PostsActionsThunkDispatch = ThunkDispatch<any, any, PostActions>;
 
 export const getPosts = () => {
   return async (dispatch: Dispatch): Promise<void> => {
-    let posts;
     try {
       const res = await fetch('https://jsonplaceholder.typicode.com/posts');
-      posts = await res.json();
+      const posts = await res.json();
+      dispatch(initPosts(posts));
     } catch (error) {
       console.log('Error Action', error);
       dispatch(errorGetPosts(error));
     }
-
-    dispatch(initPosts(posts));
   };
 };
 

@@ -11,7 +11,13 @@ export const httpPost = (id: string, body: PostType) => {
   });
 };
 
-export const httpGet = async (id: string, callback: any) => {
+export const httpGetPosts = async (url: string, callback: any) => {
+  const res = await fetch(url);
+  const data = await res.json();
+  callback({ status: 'loaded', posts: data });
+};
+
+export const httpGetPost = async (id: string, callback: any) => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
   const data = await res.json();
   callback(data);

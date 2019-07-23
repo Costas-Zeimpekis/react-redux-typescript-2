@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PostType, ErrorsType } from '../../../myTypes';
 import { RouteComponentProps } from 'react-router-dom';
-import { httpPost, httpGet } from '../../../Helpers/http';
+import { httpPost, httpGetPost } from '../../../Helpers/http';
 import { editPostValidation } from '../../../Helpers/editPostValidation';
 
 import { Link } from 'react-router-dom';
@@ -59,7 +59,7 @@ const EditPost: React.FC<EditPostProps> = props => {
   };
 
   useEffect(() => {
-    httpGet(match.params.id, setPost);
+    httpGetPost(match.params.id, setPost);
   }, [match.params.id]);
 
   const onChangeHandler = (name: string) => {

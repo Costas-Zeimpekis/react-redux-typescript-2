@@ -1,4 +1,5 @@
 import { PostType, ErrorsType } from '../myTypes';
+
 export const editPostValidation = (post: PostType, errorsObj: ErrorsType) => {
   if (String(post.userId) === '') {
     errorsObj['userId'] = 'UserId must be set';

@@ -1,5 +1,5 @@
 import { INIT_POSTS, ERROR_GET_POSTS } from '../constants';
-import { PostType, RootAction } from '../../../myTypes';
+import { PostType } from '../../../myTypes';
 import { PostActions, ErrorAction } from '../actions';
 import { combineReducers } from 'redux';
 

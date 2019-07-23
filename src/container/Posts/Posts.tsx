@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { getPosts, PostsActionsThunkDispatch } from '../store/actions';
+import React, { useState, useEffect } from 'react';
+import { initPosts } from '../store/actions';
 import { RootState, PostType } from '../../myTypes';
+import { useSelector, useDispatch } from 'react-redux';
+import { httpGetPosts } from '../../Helpers/http';
 
 import { Link } from 'react-router-dom';
 import { Grid, Button, Paper, Box, Typography } from '@material-ui/core';
@@ -14,129 +15,104 @@ interface PostsProps {
   getPosts: () => void;
 }
 
-class Posts extends Component<PostsProps> {
-  state = {
-    currentPage: 1,
-    postsPerPage: 6
-  };
-
-  componentDidMount() {
-    this.props.getPosts();
-  }
-
-  decrementPage = () => {
-    const currentPage = this.state.currentPage - 1;
-
-    if (currentPage > 0) {
-      this.setState({
-        currentPage
-      });
-    }
-  };
-
-  incrementPage = () => {
-    const currentPage = this.state.currentPage + 1;
-
-    if (currentPage < this.props.posts.length / this.state.postsPerPage) {
-      this.setState({
-        currentPage
-      });
-    }
-  };
-
-  moreHandler = () => {
-    const postsPerPage = this.state.postsPerPage + 6;
-
-    this.setState({
-      postsPerPage
-    });
-  };
-
-  render() {
-    const { posts } = this.props;
-    const styles: React.CSSProperties = {
-      textDecoration: 'none',
-      height: '100%'
-    };
-
-    const { currentPage, postsPerPage } = this.state;
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - this.state.postsPerPage;
-    const pageNumber = [];
-    const curerntPost = posts.slice(indexOfFirstPost, indexOfLastPost);
-
-    for (
-      let i = 1;
-      i <= Math.ceil(posts.length / this.state.postsPerPage);
-      i++
-    ) {
-      pageNumber.push(i);
-    }
-
-    return (
-      <Grid container spacing={4} alignItems="stretch">
-        {posts.length >= 0
-          ? curerntPost.map(post => (
-              <Grid item xs={4} key={post.id}>
-                <Link to={`/posts/${post.id}`} style={styles}>
-                  <Post title={post.title} body={post.body} />
-                </Link>
-              </Grid>
-            ))
-          : '...Loading'}
-        <Box component="section" display="flex" style={{ margin: '15px' }}>
-          <Button
-            onClick={this.decrementPage}
-            className="page-link"
-            variant="contained"
-            color="primary"
-          >
-            <FastRewind />
-            <Typography component="p">Previous</Typography>
-          </Button>
-          <Paper
-            style={{
-              backgroundColor: '#3f51b5',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              padding: '0 10px',
-              margin: '0 10px'
-            }}
-          >
-            <Typography component="p">
-              DISPLAY PAGE {this.state.currentPage} OF {pageNumber.length}
-            </Typography>
-          </Paper>
-          <Button
-            onClick={this.incrementPage}
-            className="page-link"
-            variant="contained"
-            color="primary"
-          >
-            <Typography component="p">Next</Typography>
-            <FastForward />
-          </Button>
-        </Box>
-      </Grid>
-    );
-  }
+interface getData {
+  status: string;
+  posts?: PostType[];
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    posts: state.posts.posts,
-    errorGetPost: state.error
-  };
+const styles: React.CSSProperties = {
+  textDecoration: 'none',
+  height: '100%'
 };
 
-const mapDispatchToProps = (dispatch: PostsActionsThunkDispatch) => {
-  return {
-    getPosts: () => dispatch(getPosts())
+const Posts: React.FC<PostsProps> = props => {
+  const [data, setData] = useState<getData>({ status: 'loading' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(6);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    httpGetPosts('https://jsonplaceholder.typicode.com/posts', setData);
+  }, []);
+
+  useEffect(() => {
+    if (data.posts) {
+      dispatch(initPosts(data.posts));
+    }
+    console.log('Apo Data', data.posts);
+  }, [data.posts]);
+
+  const reduxPosts = useSelector((state: RootState) => state.posts.posts);
+
+  const decrementPage = () => {
+    const currentPageNew = currentPage - 1;
+
+    if (currentPage > 0) setCurrentPage(currentPageNew);
   };
+
+  const incrementPage = () => {
+    const currentPageIcrement = currentPage + 1;
+
+    if (currentPageIcrement < props.posts.length / postsPerPage)
+      setCurrentPage(currentPageIcrement);
+  };
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const pageNumber = [];
+  const curerntPost = reduxPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  for (let i = 1; i <= Math.ceil(reduxPosts.length / postsPerPage); i++) {
+    pageNumber.push(i);
+  }
+
+  return (
+    <Grid container spacing={4} alignItems="stretch">
+      {reduxPosts.length >= 0 && data.status === 'loaded'
+        ? curerntPost.map(post => (
+            <Grid item xs={4} key={post.id}>
+              <Link to={`/posts/${post.id}`} style={styles}>
+                <Post title={post.title} body={post.body} />
+              </Link>
+            </Grid>
+          ))
+        : ''}
+      <Box component="section" display="flex" style={{ margin: '15px' }}>
+        <Button
+          onClick={decrementPage}
+          className="page-link"
+          variant="contained"
+          color="primary"
+        >
+          <FastRewind />
+          <Typography component="p">Previous</Typography>
+        </Button>
+        <Paper
+          style={{
+            backgroundColor: '#3f51b5',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 10px',
+            margin: '0 10px'
+          }}
+        >
+          <Typography component="p">
+            DISPLAY PAGE {currentPage} OF {pageNumber.length}
+          </Typography>
+        </Paper>
+        <Button
+          onClick={incrementPage}
+          className="page-link"
+          variant="contained"
+          color="primary"
+        >
+          <Typography component="p">Next</Typography>
+          <FastForward />
+        </Button>
+      </Box>
+    </Grid>
+  );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Posts);
+export default Posts;
