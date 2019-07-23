@@ -20,5 +20,5 @@ export const httpGetPosts = async (url: string, callback: any) => {
 export const httpGetPost = async (id: string, callback: any) => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
   const data = await res.json();
-  callback(data);
+  callback({ status: 'loaded', data });
 };

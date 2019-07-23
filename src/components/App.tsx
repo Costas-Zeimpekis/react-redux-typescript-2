@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { makeStyles, Container, CssBaseline } from '@material-ui/core';
 
 import ErrorBounry from './ErrorBoundry/ErrorBoundry';
-const Home = lazy(() => import('./routes/Home/Home'));
-const Posts = lazy(() => import('../container/Posts/Posts'));
+import Home from './routes/Home/Home';
+import Posts from '../container/Posts/Posts';
 const EditPost = lazy(() => import('./routes/EditPost/EditPost'));
 
 const useStyles = makeStyles({

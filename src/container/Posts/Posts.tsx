@@ -3,27 +3,18 @@ import { initPosts } from '../store/actions';
 import { RootState, PostType } from '../../myTypes';
 import { useSelector, useDispatch } from 'react-redux';
 import { httpGetPosts } from '../../Helpers/http';
-
-import { Link } from 'react-router-dom';
+import MuiTable from '../MuiTable';
 import { Grid, Button, Paper, Box, Typography } from '@material-ui/core';
 import { FastRewind, FastForward } from '@material-ui/icons';
-import Post from './Post/Post';
 
 interface PostsProps {
   posts: PostType[];
-  errorGetPosts: Error;
-  getPosts: () => void;
 }
 
 interface getData {
   status: string;
   posts?: PostType[];
 }
-
-const styles: React.CSSProperties = {
-  textDecoration: 'none',
-  height: '100%'
-};
 
 const Posts: React.FC<PostsProps> = props => {
   const [data, setData] = useState<getData>({ status: 'loading' });
@@ -39,7 +30,6 @@ const Posts: React.FC<PostsProps> = props => {
     if (data.posts) {
       dispatch(initPosts(data.posts));
     }
-    console.log('Apo Data', data.posts);
   }, [data.posts]);
 
   const reduxPosts = useSelector((state: RootState) => state.posts.posts);
@@ -53,7 +43,7 @@ const Posts: React.FC<PostsProps> = props => {
   const incrementPage = () => {
     const currentPageIcrement = currentPage + 1;
 
-    if (currentPageIcrement < props.posts.length / postsPerPage)
+    if (currentPageIcrement < reduxPosts.length / postsPerPage)
       setCurrentPage(currentPageIcrement);
   };
 
@@ -68,15 +58,12 @@ const Posts: React.FC<PostsProps> = props => {
 
   return (
     <Grid container spacing={4} alignItems="stretch">
-      {reduxPosts.length >= 0 && data.status === 'loaded'
-        ? curerntPost.map(post => (
-            <Grid item xs={4} key={post.id}>
-              <Link to={`/posts/${post.id}`} style={styles}>
-                <Post title={post.title} body={post.body} />
-              </Link>
-            </Grid>
-          ))
-        : ''}
+      {reduxPosts.length >= 0 && data.status === 'loaded' ? (
+        <MuiTable posts={curerntPost} />
+      ) : (
+        ''
+      )}
+
       <Box component="section" display="flex" style={{ margin: '15px' }}>
         <Button
           onClick={decrementPage}

@@ -17,20 +17,25 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-interface EditPostProps extends RouteComponentProps<EditPostParams> {
-  title: string;
-  body: string;
-}
+interface EditPostProps extends RouteComponentProps<EditPostParams> {}
 
 interface EditPostParams {
   id: string;
 }
 
+interface PostStateType {
+  status: string;
+  data: PostType;
+}
+
 const initialState = {
-  userId: 0,
-  id: 0,
-  title: '',
-  body: ''
+  status: 'loading',
+  data: {
+    id: 0,
+    userId: 0,
+    title: '',
+    body: ''
+  }
 };
 
 const useStyles = makeStyles({
@@ -50,7 +55,7 @@ const useStyles = makeStyles({
 });
 
 const EditPost: React.FC<EditPostProps> = props => {
-  const [post, setPost] = useState<PostType>(initialState);
+  const [post, setPost] = useState<PostStateType>(initialState);
   const classes = useStyles();
   const match = props.match;
 
@@ -70,13 +75,14 @@ const EditPost: React.FC<EditPostProps> = props => {
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    putPost(match.params.id, post);
+    putPost(match.params.id, post.data);
   };
 
   const errors: ErrorsType = useMemo(() => {
     let errorsObj: ErrorsType = {};
-
-    editPostValidation(post, errorsObj);
+    if (post.status === 'loaded') {
+      editPostValidation(post.data, errorsObj);
+    }
 
     return errorsObj;
   }, [post]);
@@ -92,9 +98,9 @@ const EditPost: React.FC<EditPostProps> = props => {
       </Grid>
       <Grid item xs={12} md={6}>
         <Card component="article" raised={true}>
-          <CardHeader title={post.title} component="h2" />
+          <CardHeader title={post.data.title} component="h2" />
           <CardContent>
-            <Typography paragraph>{post.body}</Typography>
+            <Typography paragraph>{post.data.body}</Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -112,7 +118,7 @@ const EditPost: React.FC<EditPostProps> = props => {
                   fullWidth
                   multiline
                   margin="normal"
-                  value={post.userId}
+                  value={post.data.userId}
                   onChange={onChangeHandler('userId')}
                   error={!!errors.userId}
                   helperText={!!errors.userId ? errors.userId : ''}
@@ -125,7 +131,7 @@ const EditPost: React.FC<EditPostProps> = props => {
                   id="title"
                   fullWidth
                   multiline
-                  value={post.title}
+                  value={post.data.title}
                   onChange={onChangeHandler('title')}
                   error={!!errors.title}
                   helperText={!!errors.title ? errors.title : ''}
@@ -138,7 +144,7 @@ const EditPost: React.FC<EditPostProps> = props => {
                   id="body"
                   fullWidth
                   multiline
-                  value={post.body}
+                  value={post.data.body}
                   onChange={onChangeHandler('body')}
                   placeholder="Please set your body"
                   error={!!errors.body}

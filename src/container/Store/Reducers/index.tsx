@@ -1,22 +1,14 @@
-import { INIT_POSTS, ERROR_GET_POSTS } from '../constants';
+import { INIT_POSTS } from '../constants';
 import { PostType } from '../../../myTypes';
-import { PostActions, ErrorAction } from '../actions';
+import { PostActions } from '../actions';
 import { combineReducers } from 'redux';
 
 interface PostState {
   posts: PostType[];
 }
 
-interface ErrorState {
-  error: Error;
-}
-
 const initialState: PostState = {
   posts: []
-};
-
-const initialErrorState = {
-  error: new Error('')
 };
 
 const reducerPosts = (state: PostState = initialState, action: PostActions) => {
@@ -31,22 +23,6 @@ const reducerPosts = (state: PostState = initialState, action: PostActions) => {
   }
 };
 
-const reducerErrorGetPosts = (
-  state: ErrorState = initialErrorState,
-  action: ErrorAction
-) => {
-  switch (action.type) {
-    case ERROR_GET_POSTS:
-      return {
-        ...state,
-        error: action.error
-      };
-    default:
-      return state;
-  }
-};
-
 export default combineReducers({
-  posts: reducerPosts,
-  error: reducerErrorGetPosts
+  posts: reducerPosts
 });
