@@ -16,7 +16,7 @@ interface getData {
   posts?: PostType[];
 }
 
-const Posts: React.FC<PostsProps> = props => {
+const Posts: React.FC<PostsProps> = () => {
   const [data, setData] = useState<getData>({ status: 'loading' });
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(6);
